@@ -33,25 +33,27 @@ function MusicPreview({ name, image, isSelected = false}) {
     )
 }
 
-function CustomPrompt({ song }) {
+function CustomPrompt({ song, onClose }) {
     const { name } = song;
 
     return (
         <div data-testid="custom-prompt" className="custom-prompt">
             <p>Now playing: {name}</p>
-            <button data-testid="close-button">Close</button>
+            <button data-testid="close-button" onClick={onClose}>Close</button>
         </div>
     )
 }
 
 const MusicPlayer = () => {
-  const [songs, setSongs] = useState(() => data);
-  const [currentRunningSongIndex, setCurrentRunningSongIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
+    const [songs, setSongs] = useState(() => data);
+    const [currentRunningSongIndex, setCurrentRunningSongIndex] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(true);
+    const [showPrompt, setShowPrompt] = useState(true);
 
     useEffect(() => {
         let timer;
 
+        setShowPrompt(true);
         if(isPlaying) {
             timer = setTimeout(() => {
                 setCurrentRunningSongIndex((currentRunningSongIndex + 1) % songs.length);
@@ -75,28 +77,32 @@ const MusicPlayer = () => {
         setCurrentRunningSongIndex(newIndex % songs.length);
     }
 
-  return (
-    <div className="music-player-container">
-        <CurrentlyRunningMusic
-            song={songs[currentRunningSongIndex]}
-            onPlayPause={onPlayPause}
-            onNext={onNext}
-            onPrevious={onPrevious}
-            isPlaying={isPlaying}
-        />
-        <div className="music-boxes">
-            {songs.map((song, index) =>
-                <MusicPreview
-                    key={index}
-                    name={song.name}
-                    image={song.image}
-                    isSelected={index === currentRunningSongIndex}
-                />
-            )}
+    const onClose = () => {
+        setShowPrompt(false);
+    }
+
+    return (
+        <div className="music-player-container">
+            <CurrentlyRunningMusic
+                song={songs[currentRunningSongIndex]}
+                onPlayPause={onPlayPause}
+                onNext={onNext}
+                onPrevious={onPrevious}
+                isPlaying={isPlaying}
+            />
+            <div className="music-boxes">
+                {songs.map((song, index) =>
+                    <MusicPreview
+                        key={index}
+                        name={song.name}
+                        image={song.image}
+                        isSelected={index === currentRunningSongIndex}
+                    />
+                )}
+            </div>
+            {showPrompt && <CustomPrompt song={songs[currentRunningSongIndex]} onClose={onClose} />}
         </div>
-        <CustomPrompt song={songs[currentRunningSongIndex]} />
-    </div>
-  );
+    );
 };
 
 export default MusicPlayer;
