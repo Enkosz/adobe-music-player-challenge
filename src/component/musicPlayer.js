@@ -4,13 +4,13 @@ import './musicPlayer.css';
 import data from '../data.json';
 
 function CurrentlyRunningMusic({ song, onPlayPause, onNext, onPrevious, isPlaying } ) {
-    const { title, image} = song;
+    const { name , image} = song;
     const playButtonImage = `/Images/${isPlaying ? 'pause' : 'play'}.jpg`;
 
     return (
         <div data-testid="main-music-box" className="main-music-box">
             <img className="main-music-img" alt='Default Music' src={image}/>
-            <p>{title}</p>
+            <p>{name}</p>
             <div className='all-logos'>
                 <img data-testid="backward-logo" alt='backward-logo' className='logos' onClick={onPrevious} src={'/Images/backward.jpg'}/>
                 <img data-testid="play-pause-logo" alt='play-pause-logo' className='logos' onClick={onPlayPause} src={playButtonImage}/>
