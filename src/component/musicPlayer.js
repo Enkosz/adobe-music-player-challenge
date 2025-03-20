@@ -57,6 +57,7 @@ const MusicPlayer = () => {
         if(isPlaying) {
             timer = setTimeout(() => {
                 setCurrentRunningSongIndex((currentRunningSongIndex + 1) % songs.length);
+                setShowPrompt(true);
             }, 4000);
         }
 
